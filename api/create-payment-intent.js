@@ -1,23 +1,26 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-export default async function handler(req, res){
+export default async function handler(req, res) {
     const AUTH_TOKEN = process.env.API_AUTH_TOKEN;
+
+    if (!AUTH_TOKEN) {
+        return res.status(500).json({ error: 'API_AUTH_TOKEN is not set' });
+    }
 
     const token = req.headers.authorization?.split(' ')[1];
     if (token !== AUTH_TOKEN) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
-    if (!AUTH_TOKEN) {
-        return res.status(500).json({ error: 'API_AUTH_TOKEN is not set' });
-    }
-    
+
     if (req.method === 'POST') {
         const { amount } = req.body;
 
-        const amountInt = parseInt(amount);
-        if (isNaN(amountInt)) {
-            return res.status(400).json({ error: 'Amount must be a number' });
+        // ✅ Check if amount is missing or not a valid number
+        if (amount === undefined || isNaN(parseInt(amount))) {
+            return res.status(400).json({ error: 'Amount is required and must be a valid number' });
         }
+
+        const amountInt = parseInt(amount);
 
         try {
             const paymentIntent = await stripe.paymentIntents.create({
