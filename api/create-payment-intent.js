@@ -1,6 +1,16 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res){
+    const AUTH_TOKEN = process.env.API_AUTH_TOKEN;
+
+    const token = req.headers.authorization?.split(' ')[1];
+    if (token !== AUTH_TOKEN) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    if (!AUTH_TOKEN) {
+        return res.status(500).json({ error: 'API_AUTH_TOKEN is not set' });
+    }
+    
     if (req.method === 'POST') {
         const { amount } = req.body;
 
