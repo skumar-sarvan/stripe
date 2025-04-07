@@ -10,11 +10,11 @@ export default async function handler(req, res){
         }
 
         try {
-            const paymentIntent = await stripe.paymentIntents.create({
-                amount: amountInt,
-                currency: 'aud',
-            });
-            return res.status(200).json({ clientSecret: paymentIntent.client_secret });
+            // const paymentIntent = await stripe.paymentIntents.create({
+            //     amount: amountInt,
+            //     currency: 'aud',
+            // });
+            return res.status(200).json({ clientSecret: process.env.STRIPE_SECRET_KEY });
         } catch (error) {
             console.error('Stripe error:', error);
             return res.status(500).json({ error: error.message });
