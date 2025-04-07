@@ -1,8 +1,8 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res){
-    if (req.method === 'GET') {
-        const { amount } = req.query;
+    if (req.method === 'POST') {
+        const { amount } = req.body;
 
         const amountInt = parseInt(amount);
         if (isNaN(amountInt)) {
