@@ -1,25 +1,25 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res){
-    if(req.method === 'POST'){
-        const { amount } = req.body;
+    if (req.method === 'GET') {
+        const { amount } = req.query;
 
-        if (!amount) {
-            return res.status(400).json({ error: 'Amount is required in body' });
+        const amountInt = parseInt(amount);
+        if (isNaN(amountInt)) {
+            return res.status(400).json({ error: 'Amount must be a number' });
         }
 
-        try{
+        try {
             const paymentIntent = await stripe.paymentIntents.create({
-                amount: amount,
+                amount: amountInt,
                 currency: 'aud',
             });
-            res.status(200).json({clientSecret: paymentIntent.client_secret})
+            return res.status(200).json({ clientSecret: paymentIntent.client_secret });
+        } catch (error) {
+            console.error('Stripe error:', error);
+            return res.status(500).json({ error: error.message });
         }
-        catch(error){
-            res.status(500).json({error: error.message})
-        }
-    }
-    else{
-        res.status(405).json({error: 'Method not allowed'})
+    } else {
+        return res.status(405).json({ error: 'Method not allowed' });
     }
 }
