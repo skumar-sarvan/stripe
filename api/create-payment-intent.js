@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-        const { amount } = req.body;
+        const { amount } = req.query;
 
         // ✅ Check if amount is missing or not a valid number
         if (amount === undefined || isNaN(parseInt(amount))) {
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
                 amount: amountInt,
                 currency: 'aud',
             });
-            return res.status(200).json({ clientSecret: paymentIntent.id });
+            return res.status(200).json({ clientSecret: paymentIntent.client_secret	 });
         } catch (error) {
             console.error('Stripe error:', error);
             return res.status(500).json({ error: error.message });
