@@ -16,6 +16,8 @@ export default async function handler(req, res) {
         if (req.method === 'POST') {
             const { amount } = req.body;
 
+            console.log('Incoming request body:', req.body);
+
             // ✅ Check if amount is missing or not a valid number
             if (amount === undefined || isNaN(parseInt(amount))) {
                 return res.status(400).json({ error: 'Amount is required and must be a valid number' });
@@ -23,7 +25,7 @@ export default async function handler(req, res) {
 
             const amountFloat = parseFloat(amount);
             const amountInt = Math.round(amountFloat * 100);
-            
+
             // ✅ Check if amount is a positive integer
             if (isNaN(amountInt) || amountInt <= 0) {
                 return res.status(400).json({ error: 'Amount must be a positive integer' });
