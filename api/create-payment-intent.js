@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-        const { amount } = req.query;
+        const { amount } = req.body;
 
         // ✅ Check if amount is missing or not a valid number
         if (amount === undefined || isNaN(parseInt(amount))) {
