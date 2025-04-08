@@ -46,9 +46,18 @@ export default async function handler(req, res) {
             payment_method_types: ['card']
         });
 
+        const ephemeralKey = await stripe.ephemeralKeys.create(
+            { customer: customerId },
+            { apiVersion: '2023-10-16' }
+        );
+
         return res.status(200).json({ 
             status: true, 
-            message: paymentIntent.client_secret 
+            message: {
+                clientSecret: paymentIntent.client_secret,
+                ephemeralKey: ephemeralKey.secret,
+                customerId: customerId
+            }
         });
 
     } catch (error) {
