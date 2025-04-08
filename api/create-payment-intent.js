@@ -42,7 +42,8 @@ export default async function handler(req, res) {
             amount: amountInt,
             currency: 'aud',
             customer: customerId,
-            setup_future_usage: 'off_session'
+            setup_future_usage: 'off_session',
+            payment_method_types: ['card']
         });
 
         return res.status(200).json({ 
