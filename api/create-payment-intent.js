@@ -13,12 +13,7 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-        const { amount, customerId } = req.body;
-
-        // ✅ Check if customer is missing
-        if (!customerId || typeof customerId !== 'string') {
-            return res.status(400).json({ error: 'Customer ID is required' });
-        }
+        const { amount } = req.body;
 
         // ✅ Check if amount is missing or not a valid number
         if (amount === undefined || isNaN(parseInt(amount))) {
@@ -31,8 +26,6 @@ export default async function handler(req, res) {
             const paymentIntent = await stripe.paymentIntents.create({
                 amount: amountInt,
                 currency: 'aud',
-                customer: customerId,
-                setup_future_usage: 'off_session'
             });
             return res.status(200).json({ clientSecret: paymentIntent.id });
         } catch (error) {
