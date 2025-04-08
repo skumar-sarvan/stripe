@@ -16,8 +16,8 @@ export default async function handler(req, res) {
         const { amount, customerId } = req.body;
 
         // ✅ Check if customer is missing
-        if (customerId === undefined) {
-            return res.status(400).json({ error: 'Customer is required' });
+        if (!customerId || typeof customerId !== 'string') {
+            return res.status(400).json({ error: 'Customer ID is required' });
         }
 
         // ✅ Check if amount is missing or not a valid number
