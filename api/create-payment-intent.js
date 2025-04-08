@@ -54,7 +54,6 @@ export default async function handler(req, res) {
         return res.status(200).json({ 
             status: true, 
             message: {
-                secretKey: process.env.STRIPE_PUBLISHABLE_KEY,
                 clientSecret: paymentIntent.client_secret,
                 ephemeralKey: ephemeralKey.secret,
                 customerId: customerId
